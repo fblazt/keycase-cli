@@ -1,13 +1,37 @@
 {
   "name": "keycase",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "version": "0.1.0",
+  "description": "A local-first encrypted vault for your terminal.",
+  "type": "module",
+  "bin": {
+    "keycase": "./dist/index.js"
   },
-  "keywords": [],
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup src/cli/index.ts --format esm --dts --clean && chmod +x dist/index.js",
+    "dev": "tsx src/cli/index.ts",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "password-manager",
+    "vault",
+    "terminal",
+    "cli"
+  ],
   "author": "",
   "license": "ISC",
-  "type": "commonjs"
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "tsup": "^8.5.1",
+    "tsx": "^4.22.4",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.14"
+  },
+  "dependencies": {
+    "argon2": "^0.44.0",
+    "zod": "^4.4.3"
+  }
 }
