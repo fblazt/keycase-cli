@@ -126,11 +126,11 @@ Implemented so far:
 - ambiguous lookup failure
 - secure password generator
 - case-insensitive search
+- clipboard copy and best-effort conditional clearing
 - core test coverage
 
 Not implemented yet:
 
-- clipboard handling
 - full CLI commands
 - OpenTUI interface
 - README usage examples for completed CLI/TUI flows
