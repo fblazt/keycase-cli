@@ -127,11 +127,11 @@ Implemented so far:
 - secure password generator
 - case-insensitive search
 - clipboard copy and best-effort conditional clearing
-- core test coverage
+- CLI commands for generate, add, list, get, and copy
+- core and CLI test coverage
 
 Not implemented yet:
 
-- full CLI commands
 - OpenTUI interface
 - README usage examples for completed CLI/TUI flows
 
