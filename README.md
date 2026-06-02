@@ -102,6 +102,14 @@ Run the development CLI:
 npm run dev -- help
 ```
 
+Run the OpenTUI flow in development with Bun:
+
+```sh
+npm run dev:tui
+```
+
+OpenTUI currently requires Bun or a Node.js build with `node:ffi` support.
+
 After building, run the built CLI:
 
 ```sh
@@ -128,11 +136,12 @@ Implemented so far:
 - case-insensitive search
 - clipboard copy and best-effort conditional clearing
 - CLI commands for generate, add, list, get, and copy
+- OpenTUI app shell with first-run setup and unlock screens
 - core and CLI test coverage
 
 Not implemented yet:
 
-- OpenTUI interface
+- full OpenTUI vault management screens
 - README usage examples for completed CLI/TUI flows
 
 ## Documentation

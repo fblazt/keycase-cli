@@ -19,8 +19,15 @@ export function createProgram(): Command {
     .name("keycase")
     .description("A local encrypted vault for your terminal.")
     .showHelpAfterError()
-    .action(() => {
-      context.write("Keycase TUI is not implemented yet.");
+    .action(async () => {
+      try {
+        const { startTui } = await import("../tui/index.js");
+        await startTui({ vaultPath: context.vaultPath });
+      } catch (error) {
+        context.writeError("Could not start OpenTUI. Run with Bun or a Node.js build that supports node:ffi.");
+        context.writeError(error instanceof Error ? error.message : "TUI startup failed.");
+        process.exitCode = 1;
+      }
     });
 
   program
