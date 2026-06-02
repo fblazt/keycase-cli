@@ -137,11 +137,11 @@ Implemented so far:
 - clipboard copy and best-effort conditional clearing
 - CLI commands for generate, add, list, get, and copy
 - OpenTUI app shell with first-run setup and unlock screens
+- OpenTUI vault management for add, edit, delete, search, copy, and generate
 - core and CLI test coverage
 
 Not implemented yet:
 
-- full OpenTUI vault management screens
 - README usage examples for completed CLI/TUI flows
 
 ## Documentation

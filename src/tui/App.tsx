@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useRenderer } from "@opentui/react";
 
-import { createVault, unlockVault } from "../core/vault.js";
+import { createVault, saveVault, unlockVault } from "../core/vault.js";
 import { vaultExists } from "../core/storage.js";
 import type { VaultPayload } from "../schema/vault.js";
 import { FirstRunScreen } from "./screens/FirstRunScreen.js";
@@ -18,6 +18,7 @@ export function App({ vaultPath }: AppProps) {
   const renderer = useRenderer();
   const [mode, setMode] = useState<AppMode>("loading");
   const [payload, setPayload] = useState<VaultPayload | undefined>();
+  const [masterPassword, setMasterPassword] = useState<string | undefined>();
   const [error, setError] = useState<string | undefined>();
 
   useEffect(() => {
@@ -49,6 +50,7 @@ export function App({ vaultPath }: AppProps) {
     setError(undefined);
     void createVault(vaultPath, masterPassword)
       .then((createdPayload) => {
+        setMasterPassword(masterPassword);
         setPayload(createdPayload);
         setMode("vault");
       })
@@ -61,6 +63,7 @@ export function App({ vaultPath }: AppProps) {
     setError(undefined);
     void unlockVault(vaultPath, masterPassword)
       .then((unlockedPayload) => {
+        setMasterPassword(masterPassword);
         setPayload(unlockedPayload);
         setMode("vault");
       })
@@ -85,7 +88,25 @@ export function App({ vaultPath }: AppProps) {
     return <UnlockScreen error={error} onUnlock={unlock} onQuit={quit} />;
   }
 
-  return <VaultScreen payload={payload!} />;
+  return (
+    <VaultScreen
+      payload={payload!}
+      onChange={(updatedPayload) => {
+        setPayload(updatedPayload);
+
+        if (!masterPassword) {
+          setError("Vault is unlocked, but the master password is unavailable for saving changes.");
+          return;
+        }
+
+        void saveVault(vaultPath, updatedPayload, masterPassword)
+          .then(setPayload)
+          .catch((caughtError: unknown) => {
+            setError(errorMessage(caughtError));
+          });
+      }}
+    />
+  );
 }
 
 function errorMessage(error: unknown): string {
