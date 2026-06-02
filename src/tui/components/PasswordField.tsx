@@ -27,7 +27,7 @@ export function PasswordField({ label, value, focused, onChange, onSubmit, place
       return;
     }
 
-    if (key.sequence && key.sequence.length === 1 && !key.ctrl && !key.meta) {
+    if (isPrintableCharacter(key.sequence) && !key.ctrl && !key.meta) {
       key.preventDefault();
       onChange(`${value}${key.sequence}`);
     }
@@ -40,4 +40,8 @@ export function PasswordField({ label, value, focused, onChange, onSubmit, place
       <text fg={value.length > 0 ? "#e5e7eb" : "#6b7280"}>{displayValue}</text>
     </box>
   );
+}
+
+function isPrintableCharacter(sequence: string): boolean {
+  return sequence.length === 1 && sequence >= " " && sequence !== "\u007f";
 }

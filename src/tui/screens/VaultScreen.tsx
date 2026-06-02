@@ -47,14 +47,15 @@ export function VaultScreen({ payload, onChange }: VaultScreenProps) {
       return;
     }
 
-    if (searching) {
-      handleSearchKey(key, setSearching, setQuery, setSelectedIndex);
+    if (key.name === "c" && key.ctrl) {
+      key.preventDefault();
+      renderer.destroy();
       return;
     }
 
-    if (key.name === "q") {
-      key.preventDefault();
-      renderer.destroy();
+    if (searching) {
+      handleSearchKey(key, setSearching, setQuery, setSelectedIndex);
+      return;
     }
 
     if (key.name === "escape") {
@@ -179,7 +180,7 @@ export function VaultScreen({ payload, onChange }: VaultScreenProps) {
       {searching ? <text fg="#fbbf24">Search: {query}</text> : query ? <text fg="#9ca3af">Search: {query}</text> : null}
       {entries.length === 0 ? <EmptyState /> : <VaultLayout entries={entries} selectedEntry={selectedEntry} />}
       {status ? <text fg="#a7f3d0">{status}</text> : null}
-      <text fg="#9ca3af">/ search · ↑/↓ select · a add · g generate · c copy · e edit · d delete · q quit</text>
+      <text fg="#9ca3af">/ search · ↑/↓ select · a add · g generate · c copy · e edit · d delete · ctrl+c quit</text>
     </box>
   );
 }
@@ -243,11 +244,15 @@ function handleSearchKey(
     return;
   }
 
-  if (key.sequence && key.sequence.length === 1 && !key.ctrl && !key.meta) {
+  if (isPrintableCharacter(key.sequence) && !key.ctrl && !key.meta) {
     key.preventDefault();
     setQuery((current) => `${current}${key.sequence}`);
     setSelectedIndex(0);
   }
+}
+
+function isPrintableCharacter(sequence: string): boolean {
+  return sequence.length === 1 && sequence >= " " && sequence !== "\u007f";
 }
 
 async function copySelectedSecret(

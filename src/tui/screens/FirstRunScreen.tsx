@@ -49,7 +49,7 @@ export function FirstRunScreen({ error, onCreate, onQuit }: FirstRunScreenProps)
       setFocused((current) => (current === "password" ? "confirm" : "password"));
     }
 
-    if (key.name === "escape" || key.name === "q") {
+    if (key.name === "escape" || (key.name === "c" && key.ctrl)) {
       key.preventDefault();
       onQuit();
     }
@@ -76,7 +76,7 @@ export function FirstRunScreen({ error, onCreate, onQuit }: FirstRunScreenProps)
       />
       {validationError ? <text fg="#f87171">{validationError}</text> : null}
       {error ? <text fg="#f87171">{error}</text> : null}
-      <text fg="#9ca3af">tab switch field · enter continue/create · esc/q quit</text>
+      <text fg="#9ca3af">tab switch field · enter continue/create · esc/ctrl+c quit</text>
     </box>
   );
 }

@@ -28,7 +28,7 @@ export function UnlockScreen({ error, onUnlock, onQuit }: UnlockScreenProps) {
       return;
     }
 
-    if (key.name === "escape" || key.name === "q") {
+    if (key.name === "escape" || (key.name === "c" && key.ctrl)) {
       key.preventDefault();
       onQuit();
     }
@@ -40,7 +40,7 @@ export function UnlockScreen({ error, onUnlock, onQuit }: UnlockScreenProps) {
       <PasswordField label="Master password *" value={masterPassword} focused onChange={setMasterPassword} onSubmit={submit} />
       {validationError ? <text fg="#f87171">{validationError}</text> : null}
       {error ? <text fg="#f87171">{error}</text> : null}
-      <text fg="#9ca3af">enter unlock · esc/q quit</text>
+      <text fg="#9ca3af">enter unlock · esc/ctrl+c quit</text>
     </box>
   );
 }

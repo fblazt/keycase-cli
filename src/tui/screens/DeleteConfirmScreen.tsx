@@ -17,7 +17,7 @@ export function DeleteConfirmScreen({ entryName, onConfirm, onCancel }: DeleteCo
       onConfirm();
     }
 
-    if (key.name === "n" || key.name === "escape") {
+    if (key.name === "n" || key.name === "escape" || (key.name === "c" && key.ctrl)) {
       key.preventDefault();
       onCancel();
     }
@@ -27,7 +27,7 @@ export function DeleteConfirmScreen({ entryName, onConfirm, onCancel }: DeleteCo
     <box style={{ flexDirection: "column", padding: 1, gap: 1 }}>
       <text fg="#f87171">Delete entry?</text>
       <text>{entryName}</text>
-      <text fg="#9ca3af">y/enter confirm · n/esc cancel</text>
+      <text fg="#9ca3af">y/enter confirm · n/esc/ctrl+c cancel</text>
     </box>
   );
 }

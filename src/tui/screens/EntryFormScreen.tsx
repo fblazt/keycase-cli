@@ -42,12 +42,7 @@ export function EntryFormScreen({ title, initialDraft, onSave, onCancel, onGener
     setDraft((current) => ({ ...current, [field]: value }));
   };
 
-  const submit = () => {
-    if (focusedIndex < fields.length - 1) {
-      setFocusedIndex((current) => current + 1);
-      return;
-    }
-
+  const save = () => {
     if (draft.name.trim().length === 0) {
       setError("Name is required.");
       setFocusedIndex(0);
@@ -62,6 +57,15 @@ export function EntryFormScreen({ title, initialDraft, onSave, onCancel, onGener
 
     setError(undefined);
     onSave(draft);
+  };
+
+  const continueOrSave = () => {
+    if (focusedIndex < fields.length - 1) {
+      setFocusedIndex((current) => current + 1);
+      return;
+    }
+
+    save();
   };
 
   useKeyboard((key) => {
@@ -79,7 +83,17 @@ export function EntryFormScreen({ title, initialDraft, onSave, onCancel, onGener
       onCancel();
     }
 
-    if (key.name === "g") {
+    if (key.name === "c" && key.ctrl) {
+      key.preventDefault();
+      onCancel();
+    }
+
+    if (key.name === "s" && key.ctrl) {
+      key.preventDefault();
+      save();
+    }
+
+    if (key.name === "g" && key.ctrl) {
       key.preventDefault();
       onGenerate(draft);
     }
@@ -88,14 +102,28 @@ export function EntryFormScreen({ title, initialDraft, onSave, onCancel, onGener
   return (
     <box style={{ flexDirection: "column", padding: 1, gap: 1 }}>
       <text fg="#93c5fd">{title}</text>
-      <TextField label={focused === "name" ? "Name *" : "Name"} value={draft.name} focused={focused === "name"} onChange={(value) => updateField("name", value)} onSubmit={submit} />
-      <TextField label={focused === "username" ? "Username *" : "Username"} value={draft.username} focused={focused === "username"} onChange={(value) => updateField("username", value)} onSubmit={submit} />
-      <TextField label={focused === "secret" ? "Secret *" : "Secret"} value={draft.secret} focused={focused === "secret"} onChange={(value) => updateField("secret", value)} onSubmit={submit} hidden />
-      <TextField label={focused === "url" ? "URL *" : "URL"} value={draft.url} focused={focused === "url"} onChange={(value) => updateField("url", value)} onSubmit={submit} />
-      <TextField label={focused === "tags" ? "Tags *" : "Tags"} value={draft.tags} focused={focused === "tags"} onChange={(value) => updateField("tags", value)} onSubmit={submit} placeholder="dev, important" />
-      <TextField label={focused === "notes" ? "Notes *" : "Notes"} value={draft.notes} focused={focused === "notes"} onChange={(value) => updateField("notes", value)} onSubmit={submit} />
+      <TextField label={fieldLabel("name", focused)} value={draft.name} focused={focused === "name"} onChange={(value) => updateField("name", value)} onSubmit={continueOrSave} />
+      <TextField label={fieldLabel("username", focused)} value={draft.username} focused={focused === "username"} onChange={(value) => updateField("username", value)} onSubmit={continueOrSave} />
+      <TextField label={fieldLabel("secret", focused)} value={draft.secret} focused={focused === "secret"} onChange={(value) => updateField("secret", value)} onSubmit={continueOrSave} hidden />
+      <TextField label={fieldLabel("url", focused)} value={draft.url} focused={focused === "url"} onChange={(value) => updateField("url", value)} onSubmit={continueOrSave} />
+      <TextField label={fieldLabel("tags", focused)} value={draft.tags} focused={focused === "tags"} onChange={(value) => updateField("tags", value)} onSubmit={continueOrSave} placeholder="dev, important" />
+      <TextField label={fieldLabel("notes", focused)} value={draft.notes} focused={focused === "notes"} onChange={(value) => updateField("notes", value)} onSubmit={continueOrSave} />
       {error ? <text fg="#f87171">{error}</text> : null}
-      <text fg="#9ca3af">tab next · enter continue/save · g generate password · esc cancel</text>
+      <text fg="#a7f3d0">ctrl+s save now</text>
+      <text fg="#9ca3af">tab next · enter next/save on last field · ctrl+g generate password · esc/ctrl+c cancel</text>
     </box>
   );
+}
+
+function fieldLabel(field: FieldName, focused: FieldName): string {
+  const label = {
+    name: "Name (required)",
+    username: "Username",
+    secret: "Secret (required)",
+    url: "URL",
+    tags: "Tags",
+    notes: "Notes",
+  }[field];
+
+  return field === focused ? `› ${label}` : label;
 }

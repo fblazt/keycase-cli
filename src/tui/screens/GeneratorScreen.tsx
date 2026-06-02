@@ -49,42 +49,42 @@ export function GeneratorScreen({ onUse, onCancel }: GeneratorScreenProps) {
       return;
     }
 
-    if (key.name === "escape") {
+    if (key.name === "escape" || (key.name === "c" && key.ctrl)) {
       key.preventDefault();
       onCancel();
     }
 
-    if (key.name === "g" || key.name === "r") {
+    if ((key.name === "g" || key.name === "r") && key.ctrl) {
       key.preventDefault();
       generate();
     }
 
-    if (key.name === "c") {
+    if (key.name === "y" && key.ctrl) {
       key.preventDefault();
       copy();
     }
 
-    if (key.name === "u" || key.name === "return" || key.name === "enter") {
+    if ((key.name === "u" && key.ctrl) || key.name === "return" || key.name === "enter") {
       key.preventDefault();
       onUse(password);
     }
 
-    if (key.name === "1") {
+    if (key.name === "1" && key.ctrl) {
       key.preventDefault();
       setUppercase((value) => !value);
     }
 
-    if (key.name === "2") {
+    if (key.name === "2" && key.ctrl) {
       key.preventDefault();
       setLowercase((value) => !value);
     }
 
-    if (key.name === "3") {
+    if (key.name === "3" && key.ctrl) {
       key.preventDefault();
       setNumbers((value) => !value);
     }
 
-    if (key.name === "4") {
+    if (key.name === "4" && key.ctrl) {
       key.preventDefault();
       setSymbols((value) => !value);
     }
@@ -100,7 +100,7 @@ export function GeneratorScreen({ onUse, onCancel }: GeneratorScreenProps) {
       <text fg="#e5e7eb">3 numbers: {numbers ? "on" : "off"}</text>
       <text fg="#e5e7eb">4 symbols: {symbols ? "on" : "off"}</text>
       {status ? <text fg="#a7f3d0">{status}</text> : null}
-      <text fg="#9ca3af">g/r regenerate · c copy · u/enter use in entry form · 1-4 toggle · esc back</text>
+      <text fg="#9ca3af">ctrl+g/r regenerate · ctrl+y copy · ctrl+u/enter use · ctrl+1-4 toggle · esc/ctrl+c back</text>
     </box>
   );
 }
